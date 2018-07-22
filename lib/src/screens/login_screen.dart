@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../mixins/validation_mixin.dart';
 
 // this creates the widget which is show on the screen of the device. This widget gets created and thrown away every time the application is rendered
 class LoginScreen extends StatefulWidget {
@@ -9,7 +10,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 // this creates the login data that is persisted to hold the values 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
   final formKey = GlobalKey<FormState>();
   
   String email = '';
@@ -42,13 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'you@example.com',
         ),
         keyboardType: TextInputType.emailAddress, // emailAddress is a constant of the TextFormField class
-        validator: (String value) {
-          if(!value.contains('@')) {
-            return 'Please enter a valid Email.';
-          }
-
-          return null;
-        },
+        validator: validateEmail,
         onSaved: (String value) {
           email = value;
         },
@@ -62,13 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'Password',
         ),
         obscureText: true, // sets the password fields to bullet points
-        validator: (String value) {
-          if(value.length < 4) {
-            return 'Please must be at least 4 characters.';
-          }
-
-          return null;
-        },
+        validator: validatePassword,
         onSaved: (String value) {
           password = value;
         },
