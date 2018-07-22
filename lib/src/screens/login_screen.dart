@@ -10,11 +10,14 @@ class LoginScreen extends StatefulWidget {
 
 // this creates the login data that is persisted to hold the values 
 class _LoginScreenState extends State<LoginScreen> {
+  final formKey = GlobalKey<FormState>();
+
   @override
     Widget build(BuildContext context) {
       return Container(
         margin: EdgeInsets.all(20.0),
-        child: Form( // Form is a instance variable that behind the scenes also acts as a StatefulWidget
+        child: Form( // Form is a instance variable that behind the scenes also acts as a StatefulWidget i.e. FormState
+          key: formKey, // this associates the GlobalKey with the Form widget. The Form widget will reference the FormState that is created when the LoginScreenState appears on the user's screen. This will grant you access to the properties and methods of FormState
           child: Column(
             children: <Widget>[
               emailField(),
@@ -36,6 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'you@example.com',
         ),
         keyboardType: TextInputType.emailAddress, // emailAddress is a constant of the TextFormField class
+        validator: (String value) {
+          if(!value.contains('@')) {
+            return 'Please enter a valid Email.';
+          }
+
+          return null;
+        },
       );
     }
 
@@ -46,6 +56,13 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'Password',
         ),
         obscureText: true, // sets the password fields to bullet points
+        validator: (String value) {
+          if(value.length < 4) {
+            return 'Please must be at least 4 characters.';
+          }
+
+          return null;
+        },
       );
     }
 
@@ -57,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(30.0)
         ),
         onPressed: () {
-          
+          formKey.currentState.validate(); // currentState is the FormState instance
         },
       );
     }
