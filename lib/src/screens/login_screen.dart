@@ -11,6 +11,9 @@ class LoginScreen extends StatefulWidget {
 // this creates the login data that is persisted to hold the values 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+  
+  String email = '';
+  String password = '';
 
   @override
     Widget build(BuildContext context) {
@@ -46,6 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
           return null;
         },
+        onSaved: (String value) {
+          email = value;
+        },
       );
     }
 
@@ -63,6 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
           return null;
         },
+        onSaved: (String value) {
+          password = value;
+        },
       );
     }
 
@@ -74,7 +83,10 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(30.0)
         ),
         onPressed: () {
-          formKey.currentState.validate(); // currentState is the FormState instance
+          if(formKey.currentState.validate()) { // currentState is the FormState instance
+            formKey.currentState.save();
+            print('Time to post $email and $password to API');
+          } 
         },
       );
     }
